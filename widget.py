@@ -2,28 +2,63 @@
 
 import gi
 gi.require_version('Gtk', '3.0')
-from gi.repository import Gtk
+from gi.repository import Gtk, Gdk
+import cairo
+
 
 class MyWindow(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title="Hello World")
-        #self.set_decorated(False)
-        self.set_default_size(400, 600)
-        self.set_opacity(0.5)
+        print(self.get_type_hint())
+        #self.set_type_hint(Gdk.WindowTypeHint.DOCK)
+        self.set_name('myWindow')
 
-        self.label = Gtk.Label("test")
+        self.set_keep_below(True)
+        self.set_default_size(400, 200)
+
+        self.screen = self.get_screen()
+        self.visual = self.screen.get_rgba_visual()
+        if self.visual != None and self.screen.is_composited():
+            self.set_visual(self.visual)
+
+        self.set_app_paintable(True)
+
+
+        self.label = Gtk.Label("Das ist ein etwas längerer Text. Und gleich mal schaun, ob zeilenumbruch geht.")
+        self.label.set_name('myLabel')
+        self.label.set_line_wrap(True)
         self.add(self.label)
 
-        self.button = Gtk.Button(label="Click Here")
-        self.button.connect("clicked", self.on_button_clicked)
-        #self.add(self.button)
+        self.style_provider = Gtk.CssProvider()
 
-    def on_button_clicked(self, widget):
-        print("Hello World")
+        css = b"""
+        #myWindow, #myLabel {
+        font: 50px Annie Use Your Telescope, sans-serif;
+        text-shadow: 0px 0px 2px #222222;
+        color: rgba (100%, 100%, 100%, 1);
+        background-color: rgba (0%, 0%, 0%, 0.4);
+        }
+        """
+
+        self.style_provider.load_from_data(css)
+
+        Gtk.StyleContext.add_provider_for_screen(
+        Gdk.Screen.get_default(),
+        self.style_provider,
+        Gtk.STYLE_PROVIDER_PRIORITY_APPLICATION
+        )
+
+        self.connect("draw", self.area_draw)
+
+    def area_draw(self, widget, cr):
+        cr.set_source_rgba(.8, .8, .8, 0.2)
+        cr.set_operator(cairo.OPERATOR_SOURCE)
+        cr.paint()
+        cr.set_operator(cairo.OPERATOR_OVER)
 
 win = MyWindow()
-#win.GtkWindowSetDecorate(selfe, False)
+
 win.connect("delete-event", Gtk.main_quit)
 win.show_all()
 Gtk.main()
