@@ -1,0 +1,8 @@
+#myWindow, #myLabel {
+font: 50px Annie Use Your Telescope, sans-serif;
+text-shadow: 0px 0px 2px #222222;
+color: rgba (100%, 50%, 100%, 1);
+background-color: rgba (0%, 0%, 100%, 0.4);
+min-width: 1px;
+min-height: 1px;
+}

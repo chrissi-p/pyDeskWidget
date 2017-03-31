@@ -15,7 +15,7 @@ class MyWindow(Gtk.Window):
         self.set_name('myWindow')
 
         self.set_keep_below(True)
-        self.set_default_size(400, 200)
+        self.set_default_size(800, 500)
 
         self.screen = self.get_screen()
         self.visual = self.screen.get_rgba_visual()
@@ -32,16 +32,11 @@ class MyWindow(Gtk.Window):
 
         self.style_provider = Gtk.CssProvider()
 
-        css = b"""
-        #myWindow, #myLabel {
-        font: 50px Annie Use Your Telescope, sans-serif;
-        text-shadow: 0px 0px 2px #222222;
-        color: rgba (100%, 100%, 100%, 1);
-        background-color: rgba (0%, 0%, 0%, 0.4);
-        }
-        """
+        css = open('style.css', 'rb') # rb needed for python 3 support
+        css_data = css.read()
+        css.close()
 
-        self.style_provider.load_from_data(css)
+        self.style_provider.load_from_data(css_data)
 
         Gtk.StyleContext.add_provider_for_screen(
         Gdk.Screen.get_default(),

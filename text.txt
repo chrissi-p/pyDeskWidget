@@ -1,0 +1,2 @@
+Hier steht ein etwas längerer Text, so dass es nicht mehr in eine Zeile auf dem Bildschirm passt. Es muss also automatisch ein Zeilenumbruch stattfinden.
+Zweite Zeile.
